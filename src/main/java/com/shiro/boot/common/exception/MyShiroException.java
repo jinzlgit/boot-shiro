@@ -37,7 +37,8 @@ public class MyShiroException {
     @ResponseBody
     public Map<String, Object> errorHandler(){
         Map<String, Object> map = new HashMap<>();
-        map.put("666", "统一异常返回");
+        map.put("code", "666");
+        map.put("msg", "统一异常返回");
         return map;
     }
 }
