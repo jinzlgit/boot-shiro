@@ -9,6 +9,7 @@ import com.shiro.boot.service.SysMenuService;
 import com.shiro.boot.service.SysRoleMenuService;
 import com.shiro.boot.service.SysRoleService;
 import com.shiro.boot.service.SysUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/menu")
+@Slf4j
 public class UserMenuController {
 
     @Autowired

@@ -1,6 +1,8 @@
 package com.shiro.boot.common.interceptor;
 
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author jzl
  * @date 2020/3/23 9:08
  */
+@Slf4j
+@Component
 public class MyInterceptor implements HandlerInterceptor {
     /**
      * 预处理回调方法，实现处理器的预处理（如检查登录），第三个参数为响应的处理器，自定义Controller
@@ -32,7 +36,7 @@ public class MyInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println(request.getRequestURI()+" 方法开始执行了");
+        log.info(request.getRequestURI() + " 方法开始执行了");
         return true;
     }
 
@@ -60,6 +64,6 @@ public class MyInterceptor implements HandlerInterceptor {
      */
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        System.out.println("方法执行结束啦");
+        log.info("方法执行结束啦");
     }
 }

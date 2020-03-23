@@ -3,8 +3,13 @@ package com.shiro.boot;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+/**
+ * @ServletComponentScan 扫描Servlet,Filter,Listener 添加到容器
+ */
+@ServletComponentScan
 @SpringBootApplication
 @EnableTransactionManagement
 @MapperScan("com.shiro.boot.mapper")
