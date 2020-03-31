@@ -14,15 +14,15 @@ import java.util.Map;
  * @author jzl
  * @date 2020/3/16 11:21
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class MyShiroException {
 
     /**
      * 处理Shiro权限拦截异常
      * @return
      */
-    @ExceptionHandler(value = AuthorizationException.class)
-    @ResponseBody
+//    @ExceptionHandler(value = AuthorizationException.class)
+//    @ResponseBody
     public Map<String, Object> defaultErrorHandler(){
         Map<String, Object> map = new HashMap<>();
         map.put("403", "权限不足");
@@ -33,8 +33,8 @@ public class MyShiroException {
      * 统一异常返回
      * @return
      */
-    @ExceptionHandler(value = Exception.class)
-    @ResponseBody
+//    @ExceptionHandler(value = Exception.class)
+//    @ResponseBody
     public Map<String, Object> errorHandler(){
         Map<String, Object> map = new HashMap<>();
         map.put("code", "666");
