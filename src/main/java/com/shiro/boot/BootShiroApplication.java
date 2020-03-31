@@ -4,14 +4,18 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @ServletComponentScan 扫描Servlet,Filter,Listener 添加到容器
+ * @EnableCaching 开启缓存
+ * @EnableTransactionManagement 开启事务
  */
 @ServletComponentScan
 @SpringBootApplication
 @EnableTransactionManagement
+@EnableCaching
 @MapperScan("com.shiro.boot.mapper")
 public class BootShiroApplication {
 
