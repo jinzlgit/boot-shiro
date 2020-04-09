@@ -7,6 +7,9 @@ import com.shiro.boot.common.result.validgroup.Creat;
 import com.shiro.boot.common.result.validgroup.Update;
 import com.shiro.boot.entity.SysUserEntity;
 import com.shiro.boot.service.SysUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +28,7 @@ import java.util.List;
  * @author jzl
  * @date 2020/3/27 11:00
  */
+@Api(value = "Swagger2 在线接口文档")
 @RestController
 @RequestMapping("/test")
 @Slf4j
@@ -76,8 +80,9 @@ public class TestController {
         return R.error();
     }
 
+    @ApiOperation(value = "新增用户")
     @PostMapping("/addUser")
-    public R addUser(@RequestBody @Validated(Creat.class)ArgumentValidEntity user) {
+    public R addUser(@RequestBody @Validated(Creat.class) @ApiParam("用户信息") ArgumentValidEntity user) {
         return R.ok().data("user", user);
     }
 

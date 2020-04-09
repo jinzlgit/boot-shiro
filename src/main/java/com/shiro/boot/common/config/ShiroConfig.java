@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -64,14 +65,38 @@ public class ShiroConfig {
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager){
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        // 必须设置，Shiro的核心安全接口
         shiroFilterFactoryBean.setSecurityManager(securityManager);
+        // 这里的index是后台接口名，非页面，登录成功后要跳转的连接
+        // 配置Shiro默认登录界面地址，前后端分离项目中登录界面跳转应由前端路由控制，后台仅返回json数据
+        //shiroFilterFactoryBean.setSuccessUrl("/index");
+
+//        // 自定义拦截器限制并发人数
+//        LinkedHashMap<String, Filter> filtersMap = new LinkedHashMap<>();
+//        // 限制同一账号同时在线的个数
+//        filtersMap.put("kickout", kickoutSessionControlFilter());
+//        // 统计登录人数
+//        shiroFilterFactoryBean.setFilters(filtersMap);
+
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 注意过滤器配置顺序不能颠倒
         // 配置过滤：不会被拦截的连接
         filterChainDefinitionMap.put("/static/**", "anon");
+
+        filterChainDefinitionMap.put("/swagger-ui.html", "anon"); // 放行 API 文档接口
+        filterChainDefinitionMap.put("/swagger-resources/**","anon");
+        filterChainDefinitionMap.put("/v2/api-docs/**","anon");
+        filterChainDefinitionMap.put("/webjars/springfox-swagger-ui/**","anon");
+
         filterChainDefinitionMap.put("/userLogin/**", "anon");
+        filterChainDefinitionMap.put("/test/**", "anon"); // 放行测试类
+        filterChainDefinitionMap.put("/thread/**", "anon"); // 放行测试类
+        filterChainDefinitionMap.put("/mq/**", "anon"); // 放行测试类
+        filterChainDefinitionMap.put("/cache/**", "anon"); // 放行缓存测试类的权限
+        // 如果开启限制同一账号登录，改为 "kickout,authc"
         filterChainDefinitionMap.put("/**", "authc");
-        // 配置Shiro默认登录界面地址，前后端分离项目中登录界面跳转应由前端路由控制，后台仅返回json数据
+
+        // 这里是后台的接口名，非页面，如果不设置会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/userLogin/unauth");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
@@ -87,7 +112,7 @@ public class ShiroConfig {
         // 自定义Session管理
         securityManager.setSessionManager(sessionManager());
         // 自定义Cache实现
-        securityManager.setCacheManager(cacheManager());
+        securityManager.setCacheManager(redisCacheManager());
         // 自定义Realm验证
         securityManager.setRealm(shiroRealm());
         return securityManager;
@@ -136,10 +161,13 @@ public class ShiroConfig {
     /**
      * 配置Cache管理器：用于往Redis存储权限和角色标识
      * 使用的是Shiro-redis开源插件
+     *
+     * 此处的实例名(原为cacheManager) 会与SpringBoot自动配置redis缓存中的实例冲突，可将此处改名
+     *
      * @return
      */
     @Bean
-    public RedisCacheManager cacheManager(){
+    public RedisCacheManager redisCacheManager(){
         RedisCacheManager cacheManager = new RedisCacheManager();
         cacheManager.setRedisManager(redisManager());
         cacheManager.setKeyPrefix(CACHE_KEY);
